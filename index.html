@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      type="text/JavaScript"
+      src=" https://MomentJS.com/downloads/moment.js"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+    <title>Учет расходов</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <h1 class="header__heading">Учет моих расходов</h1>
+        <form class="header__form" onsubmit="addExpense(event)">
+          <div class="header__form-cell header__form_name">
+            <label for="expense-name" class="form-cell__label"
+              >Куда было потрачено?</label
+            >
+            <input
+              id="expense-name"
+              type="text"
+              class="form-cell__input"
+              placeholder="Куда было потрачено?"
+            />
+          </div>
+          <div class="header__form-cell header__form_amount">
+            <label for="expense-amount" class="form-cell__label"
+              >Сколько было потрачено?</label
+            >
+            <input
+              id="expense-amount"
+              type="text"
+              class="form-cell__input"
+              placeholder="Сколько было потрачено?"
+            />
+          </div>
+          <div class="header__form-cell">
+            <button class="header__form_btn btn">Добавить</button>
+          </div>
+        </form>
+        <p class="error-message hidden">
+          Пожалуйста укажите куда и сколько вы потратили
+        </p>
+        <p class="text sum-text">Итого: <span class="text sum-num"></span>р.</p>
+      </header>
+      <ul class="expenses">
+        <!-- <li> -->
+        <!-- <div class="content">
+            <p class="expense-number text">1)</p>
+            <p id="text-name-0" class="text text-name">234</p>
+            <div class="item__date-amount-box">
+              <p id="text-date-0" class="text">May 12, 2022</p>
+              <p id="text-amount-0" class="text">342 р.</p>
+            </div>
+            <div class="btns">
+              <button class="btn expense-btn">
+                <img
+                  src="img/edit_icon.png"
+                  alt="pencil"
+                  class="icon"
+                /></button
+              ><button class="btn expense-btn">
+                <img src="img/delete_icon.png" alt="trash can" class="icon" />
+              </button>
+            </div>
+          </div> -->
+
+        <!-- <div class="expense-item-edit">
+            <input
+              type="text"
+              id="expense-edit-name-0"
+              class="edit-input hidden"
+            />
+            <div class="item__date-amount-box">
+              <input
+                type="text"
+                id="expense-edit-date-0"
+                class="edit-input hidden"
+              />
+              <input
+                type="text"
+                id="expense-edit-amount-0"
+                class="edit-input hidden"
+              />
+            </div>
+            <button class="btn expense-btn hidden">
+              <img src="img/done_icon.png" alt="checkmark" class="icon" />
+            </button>
+            <button class="btn expense-btn hidden">
+              <img src="img/close_icon.png" alt="cross" class="icon" />
+            </button>
+          </div> -->
+        <!-- </li> -->
+      </ul>
+    </div>
+  </body>
+</html>
