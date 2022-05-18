@@ -52,55 +52,11 @@
         </p>
         <p class="text sum-text">Итого: <span class="text sum-num"></span>р.</p>
       </header>
-      <ul class="expenses">
-        <!-- <li> -->
-        <!-- <div class="content">
-            <p class="expense-number text">1)</p>
-            <p id="text-name-0" class="text text-name">234</p>
-            <div class="item__date-amount-box">
-              <p id="text-date-0" class="text">May 12, 2022</p>
-              <p id="text-amount-0" class="text">342 р.</p>
-            </div>
-            <div class="btns">
-              <button class="btn expense-btn">
-                <img
-                  src="img/edit_icon.png"
-                  alt="pencil"
-                  class="icon"
-                /></button
-              ><button class="btn expense-btn">
-                <img src="img/delete_icon.png" alt="trash can" class="icon" />
-              </button>
-            </div>
-          </div> -->
-
-        <!-- <div class="expense-item-edit">
-            <input
-              type="text"
-              id="expense-edit-name-0"
-              class="edit-input hidden"
-            />
-            <div class="item__date-amount-box">
-              <input
-                type="text"
-                id="expense-edit-date-0"
-                class="edit-input hidden"
-              />
-              <input
-                type="text"
-                id="expense-edit-amount-0"
-                class="edit-input hidden"
-              />
-            </div>
-            <button class="btn expense-btn hidden">
-              <img src="img/done_icon.png" alt="checkmark" class="icon" />
-            </button>
-            <button class="btn expense-btn hidden">
-              <img src="img/close_icon.png" alt="cross" class="icon" />
-            </button>
-          </div> -->
-        <!-- </li> -->
-      </ul>
+      <ul class="expenses"></ul>
+      <p class="error-message fetch-error"></p>
+      <button class="clear-btn hidden" onclick="deleteAllExpenses()">
+        Очистить все
+      </button>
     </div>
   </body>
 </html>

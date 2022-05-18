@@ -57,7 +57,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-start;
+  /* align-items: flex-start; */
   gap: 0.5rem;
 }
 
@@ -108,11 +108,16 @@ body {
 
 .expenses__item {
   /* background-color: #12b886; */
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   list-style: none;
   margin-bottom: 1rem;
 }
 
 .content {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -180,6 +185,29 @@ body {
   color: #ea2f2f;
 }
 
+.fetch-error {
+  font-size: 2.3rem;
+  margin-bottom: 1rem;
+}
+
+.clear-btn {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 1rem;
+  background-color: #12b8862f;
+  transition: all 0.3s ease-in-out;
+}
+
+.clear-btn:hover {
+  background-color: #12b886;
+  transform: scale(1.01);
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0.3rem 0.8rem;
+}
+
 .error {
   background-color: #ffe0e0;
 }
@@ -189,7 +217,7 @@ body {
 }
 
 /* ///// MEDIA QUERYS ////// */
-/* @media screen and (max-width: 900px) {
+@media screen and (max-width: 930px) {
   .wrapper {
     width: 50rem;
   }
@@ -247,9 +275,15 @@ body {
 
   .date-amount-box {
     text-align: center;
+    gap: 0.5rem;
   }
 
   .error-message {
     margin: 1rem 0;
   }
-} */
+
+  .edit-input {
+    height: 2.5rem;
+    font-size: 1.3rem;
+  }
+}
