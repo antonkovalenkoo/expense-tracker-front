@@ -9,12 +9,8 @@ window.onload = async () => {
     const res = await fetch(url);
     const data = await res.json();
 
-    if (res.status === 404) {
-      throw new Error(data.error);
-    } else {
-      allExpenses = data;
-      render();
-    }
+    allExpenses = data;
+    render();
   } catch (error) {
     showFetchError(error);
   }
@@ -51,12 +47,8 @@ const addExpense = async (e) => {
     });
     const data = await res.json();
 
-    if (res.status === 404) {
-      throw new Error(data.error);
-    } else {
-      allExpenses.unshift(data);
-      render();
-    }
+    allExpenses.unshift(data);
+    render();
   } catch (error) {
     showFetchError(error);
   }
@@ -74,12 +66,8 @@ const deleteExpense = async (id) => {
     });
     const data = await res.json();
 
-    if (res.status === 404) {
-      throw new Error(data.error);
-    } else {
-      allExpenses = allExpenses.filter((item) => item._id !== id);
-      render();
-    }
+    allExpenses = allExpenses.filter((item) => item._id !== id);
+    render();
   } catch (error) {
     showFetchError(error);
   }
@@ -92,12 +80,8 @@ const deleteAllExpenses = async () => {
     });
     const data = await res.json();
 
-    if (res.status === 404) {
-      throw new Error(data.error);
-    } else {
-      allExpenses = data;
-      render();
-    }
+    allExpenses = data;
+    render();
   } catch (error) {
     showFetchError(error);
   }
@@ -134,13 +118,9 @@ const acceptEdits = async (id) => {
     });
     const data = await res.json();
 
-    if (res.status === 404) {
-      throw new Error(data.error);
-    } else {
-      allExpenses = allExpenses.map((item) => item._id === id ? data : item
-      );
-      render();
-    }
+    allExpenses = allExpenses.map((item) => item._id === id ? data : item
+    );
+    render();
   } catch (error) {
     showFetchError(error);
   }
@@ -173,8 +153,8 @@ const render = () => {
   document.querySelector('.fetch-error').classList.add('hidden');
 
   allExpenses.length > 1
-    ? document.querySelector('.clear-btn').classList.remove('hidden')
-    : document.querySelector('.clear-btn').classList.add('hidden');
+    ? document.querySelector('.clear-button').classList.remove('hidden')
+    : document.querySelector('.clear-button').classList.add('hidden');
 
   const expensesList = document.querySelector('.expenses');
 
@@ -222,35 +202,35 @@ const render = () => {
     dateAmountBlock.appendChild(dateElement);
     dateAmountBlock.appendChild(amountElement);
 
-    // btns box
-    const btnsBlock = document.createElement('div');
-    btnsBlock.className = 'btns';
+    // buttons box
+    const buttonsBlock = document.createElement('div');
+    buttonsBlock.className = 'buttons';
 
-    const editBtn = document.createElement('button');
-    editBtn.className = 'btn expense-btn';
-    editBtn.onclick = () => {
+    const editButton = document.createElement('button');
+    editButton.className = 'button expense-button';
+    editButton.onclick = () => {
       showEditFields(_id);
     };
-    const editBtnImg = document.createElement('img');
-    editBtnImg.src = 'img/edit_icon.png';
-    editBtnImg.alt = 'pencil';
-    editBtnImg.className = 'icon';
+    const editButtonImg = document.createElement('img');
+    editButtonImg.src = 'img/edit_icon.png';
+    editButtonImg.alt = 'pencil';
+    editButtonImg.className = 'icon';
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn expense-btn';
-    deleteBtn.onclick = () => {
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'button expense-button';
+    deleteButton.onclick = () => {
       deleteExpense(_id);
     };
-    const deleteBtnImg = document.createElement('img');
-    deleteBtnImg.src = 'img/delete_icon.png';
-    deleteBtnImg.alt = 'trash can';
-    deleteBtnImg.className = 'icon';
+    const deleteButtonImg = document.createElement('img');
+    deleteButtonImg.src = 'img/delete_icon.png';
+    deleteButtonImg.alt = 'trash can';
+    deleteButtonImg.className = 'icon';
 
-    // btns appending
-    editBtn.appendChild(editBtnImg);
-    deleteBtn.appendChild(deleteBtnImg);
-    btnsBlock.appendChild(editBtn);
-    btnsBlock.appendChild(deleteBtn);
+    // Buttons appending
+    editButton.appendChild(editButtonImg);
+    deleteButton.appendChild(deleteButtonImg);
+    buttonsBlock.appendChild(editButton);
+    buttonsBlock.appendChild(deleteButton);
 
     // EDIT FIELDS
     const editBlock = document.createElement('div');
@@ -279,43 +259,43 @@ const render = () => {
     dateAmountEditBlock.appendChild(dateInput);
     dateAmountEditBlock.appendChild(amountInput);
 
-    // edit btns
-    const btnsEditBlock = document.createElement('div');
-    btnsEditBlock.className = 'btns';
+    // edit buttons
+    const ButtonsEditBlock = document.createElement('div');
+    ButtonsEditBlock.className = 'buttons';
 
-    const doneBtn = document.createElement('button');
-    doneBtn.className = 'btn expense-btn';
-    doneBtn.onclick = () => {
+    const doneButton = document.createElement('button');
+    doneButton.className = 'button expense-button';
+    doneButton.onclick = () => {
       acceptEdits(_id);
     };
-    const doneBtnImg = document.createElement('img');
-    doneBtnImg.src = 'img/done_icon.png';
-    doneBtnImg.alt = 'checkmark';
-    doneBtnImg.className = 'icon ';
+    const doneButtonImg = document.createElement('img');
+    doneButtonImg.src = 'img/done_icon.png';
+    doneButtonImg.alt = 'checkmark';
+    doneButtonImg.className = 'icon ';
 
-    const cancelBtn = document.createElement('button');
-    cancelBtn.className = 'btn expense-btn';
-    cancelBtn.onclick = () => {
+    const cancelButton = document.createElement('button');
+    cancelButton.className = 'button expense-button';
+    cancelButton.onclick = () => {
       hideEditFields(_id);
     };
-    const cancelBtnImg = document.createElement('img');
-    cancelBtnImg.src = 'img/close_icon.png';
-    cancelBtnImg.alt = 'cross';
-    cancelBtnImg.className = 'icon';
+    const cancelButtonImg = document.createElement('img');
+    cancelButtonImg.src = 'img/close_icon.png';
+    cancelButtonImg.alt = 'cross';
+    cancelButtonImg.className = 'icon';
 
-    doneBtn.appendChild(doneBtnImg);
-    cancelBtn.appendChild(cancelBtnImg);
-    btnsEditBlock.appendChild(doneBtn);
-    btnsEditBlock.appendChild(cancelBtn);
+    doneButton.appendChild(doneButtonImg);
+    cancelButton.appendChild(cancelButtonImg);
+    ButtonsEditBlock.appendChild(doneButton);
+    ButtonsEditBlock.appendChild(cancelButton);
 
     // final appending
     content.appendChild(contentName);
     content.appendChild(dateAmountBlock);
-    content.appendChild(btnsBlock);
+    content.appendChild(buttonsBlock);
 
     editBlock.appendChild(nameInput);
     editBlock.appendChild(dateAmountEditBlock);
-    editBlock.appendChild(btnsEditBlock);
+    editBlock.appendChild(ButtonsEditBlock);
 
     expense.appendChild(expenseNumber);
     expense.appendChild(content);
