@@ -57,7 +57,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  /* align-items: flex-start; */
   gap: 0.5rem;
 }
 
@@ -107,7 +106,6 @@ body {
 }
 
 .expenses__item {
-  /* background-color: #12b886; */
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -128,7 +126,6 @@ body {
 }
 
 .date-amount-box {
-  /* background-color: aqua; */
   display: flex;
   gap: 2rem;
   width: 40%;
@@ -141,7 +138,6 @@ body {
   justify-content: flex-end;
   align-items: center;
   gap: 2rem;
-  /* background-color: beige; */
 }
 
 .edit-block {

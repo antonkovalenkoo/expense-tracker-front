@@ -1,9 +1,8 @@
+let allExpenses = [];
 const url = 'http://localhost:8000';
 const fetchHeaders = {
   'Content-type': 'application/json',
 };
-let allExpenses = [];
-let totalSpent = JSON.parse(localStorage.getItem('total')) || 0;
 
 window.onload = async () => {
   try {
@@ -31,9 +30,9 @@ const addExpense = async (e) => {
   amountInput.addEventListener('keydown', removeErrorMessage);
 
   if (
-    nameInput.value.trim() === '' ||
-    amountInput.value.trim() === '' ||
-    isNaN(amountInput.value)
+    nameInput.value.trim() === '' 
+    || amountInput.value.trim() === '' 
+    || Number.isNaN(+amountInput.value)
   ) {
     nameInput.classList.add('error');
     amountInput.classList.add('error');
@@ -56,8 +55,6 @@ const addExpense = async (e) => {
       throw new Error(data.error);
     } else {
       allExpenses.unshift(data);
-      totalSpent += +amountInput.value;
-      setToLocalStorage(totalSpent);
       render();
     }
   } catch (error) {
@@ -80,10 +77,7 @@ const deleteExpense = async (id) => {
     if (res.status === 404) {
       throw new Error(data.error);
     } else {
-      const deletedItem = allExpenses.find((item) => item._id === id);
       allExpenses = allExpenses.filter((item) => item._id !== id);
-      totalSpent -= deletedItem.amount;
-      setToLocalStorage(totalSpent);
       render();
     }
   } catch (error) {
@@ -101,9 +95,7 @@ const deleteAllExpenses = async () => {
     if (res.status === 404) {
       throw new Error(data.error);
     } else {
-      allExpenses = [];
-      totalSpent = 0;
-      setToLocalStorage(totalSpent);
+      allExpenses = data;
       render();
     }
   } catch (error) {
@@ -123,16 +115,9 @@ const showEditFields = (id) => {
 
 const acceptEdits = async (id) => {
   const editingItem = allExpenses.find((item) => item._id === id);
-  const oldAmount = editingItem.amount;
-
   const newName = document.querySelector(`#name-input-${id}`);
   const newAmount = document.querySelector(`#amount-input-${id}`);
   const newDate = document.querySelector(`#date-input-${id}`);
-
-  const dateFormatter = () =>
-    newDate.value === ''
-      ? editingItem.date
-      : new Date(newDate.value).toISOString();
 
   try {
     const res = await fetch(`${url}/updateExpense`, {
@@ -141,7 +126,9 @@ const acceptEdits = async (id) => {
         _id: id,
         name: newName.value,
         amount: +newAmount.value,
-        date: dateFormatter(),
+        date: newDate.value === ''
+          ? editingItem.date
+          : new Date(newDate.value).toISOString(),
       }),
       headers: fetchHeaders,
     });
@@ -150,16 +137,8 @@ const acceptEdits = async (id) => {
     if (res.status === 404) {
       throw new Error(data.error);
     } else {
-      allExpenses.forEach((item) => {
-        if (item._id === id) {
-          item.name = newName.value;
-          item.amount = newAmount.value;
-          item.date = dateFormatter();
-        }
-      });
-      totalSpent -= +oldAmount;
-      totalSpent += +newAmount.value;
-      setToLocalStorage(totalSpent);
+      allExpenses = allExpenses.map((item) => item._id === id ? data : item
+      );
       render();
     }
   } catch (error) {
@@ -187,11 +166,10 @@ const showFetchError = (error) => {
   fetchError.innerText = `${error}`;
 };
 
-const setToLocalStorage = (totalNum) =>
-  localStorage.setItem('total', JSON.stringify(totalNum));
-
 const render = () => {
-  document.querySelector('.sum-num').innerText = totalSpent;
+  let sumTotalSpent = allExpenses.reduce((acc, item) => acc += item.amount, 0)
+  document.querySelector('.sum-num').innerText = sumTotalSpent;
+
   document.querySelector('.fetch-error').classList.add('hidden');
 
   allExpenses.length > 1
@@ -206,7 +184,7 @@ const render = () => {
 
   allExpenses.forEach((item, index) => {
     const { _id, name, amount, date } = item;
-
+    
     // li
     const expense = document.createElement('li');
     expense.id = `expense-item-${_id}`;
