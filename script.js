@@ -25,8 +25,7 @@ const addExpense = async (e) => {
   nameInput.addEventListener('keydown', removeErrorMessage);
   amountInput.addEventListener('keydown', removeErrorMessage);
 
-  if (
-    nameInput.value.trim() === '' 
+  if ( nameInput.value.trim() === '' 
     || amountInput.value.trim() === '' 
     || Number.isNaN(+amountInput.value)
   ) {
@@ -260,8 +259,8 @@ const render = () => {
     dateAmountEditBlock.appendChild(amountInput);
 
     // edit buttons
-    const ButtonsEditBlock = document.createElement('div');
-    ButtonsEditBlock.className = 'buttons';
+    const buttonsEditBlock = document.createElement('div');
+    buttonsEditBlock.className = 'buttons';
 
     const doneButton = document.createElement('button');
     doneButton.className = 'button expense-button';
@@ -285,8 +284,8 @@ const render = () => {
 
     doneButton.appendChild(doneButtonImg);
     cancelButton.appendChild(cancelButtonImg);
-    ButtonsEditBlock.appendChild(doneButton);
-    ButtonsEditBlock.appendChild(cancelButton);
+    buttonsEditBlock.appendChild(doneButton);
+    buttonsEditBlock.appendChild(cancelButton);
 
     // final appending
     content.appendChild(contentName);
@@ -295,7 +294,7 @@ const render = () => {
 
     editBlock.appendChild(nameInput);
     editBlock.appendChild(dateAmountEditBlock);
-    editBlock.appendChild(ButtonsEditBlock);
+    editBlock.appendChild(buttonsEditBlock);
 
     expense.appendChild(expenseNumber);
     expense.appendChild(content);
