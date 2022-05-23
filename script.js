@@ -46,7 +46,8 @@ const addExpense = async (e) => {
     });
     const data = await res.json();
 
-    allExpenses.unshift(data);
+    allExpenses.push(data);
+    allExpenses.sort((a, b) => new Date(b.date) - new Date(a.date));
     render();
   } catch (error) {
     showFetchError(error);
@@ -65,7 +66,9 @@ const deleteExpense = async (id) => {
     });
     const data = await res.json();
 
-    allExpenses = allExpenses.filter((item) => item._id !== id);
+    if (data.deletedCount > 0) {
+      allExpenses = allExpenses.filter((item) => item._id !== id);
+    }
     render();
   } catch (error) {
     showFetchError(error);
@@ -79,7 +82,9 @@ const deleteAllExpenses = async () => {
     });
     const data = await res.json();
 
-    allExpenses = data;
+    if (data.deletedCount > 0) {
+      allExpenses = [];
+    }
     render();
   } catch (error) {
     showFetchError(error);
@@ -93,7 +98,7 @@ const showEditFields = (id) => {
 
   document.querySelector(`#name-input-${id}`).value = selectedItem.name;
   document.querySelector(`#amount-input-${id}`).value = selectedItem.amount;
-  document.querySelector(`#date-input-${id}`).value = selectedItem.date;
+  document.querySelector(`#date-input-${id}`).value = moment(selectedItem.date).format('YYYY-MM-DD');
 };
 
 const acceptEdits = async (id) => {
@@ -101,6 +106,16 @@ const acceptEdits = async (id) => {
   const newName = document.querySelector(`#name-input-${id}`);
   const newAmount = document.querySelector(`#amount-input-${id}`);
   const newDate = document.querySelector(`#date-input-${id}`);
+
+  if ( newName.value.trim() === '' 
+    || newAmount.value.trim() === '' 
+    || Number.isNaN(+newAmount.value)
+  ) {
+    newName.classList.add('error');
+    newAmount.classList.add('error');
+    document.querySelector('.error-message').classList.remove('hidden');
+    return;
+  }
 
   try {
     const res = await fetch(`${url}/updateExpense`, {
@@ -117,8 +132,7 @@ const acceptEdits = async (id) => {
     });
     const data = await res.json();
 
-    allExpenses = allExpenses.map((item) => item._id === id ? data : item
-    );
+    allExpenses = allExpenses.map((item) => item._id === id ? data : item);
     render();
   } catch (error) {
     showFetchError(error);
