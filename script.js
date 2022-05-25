@@ -8,7 +8,6 @@ window.onload = async () => {
   try {
     const res = await fetch(url);
     const data = await res.json();
-
     allExpenses = data;
     render();
   } catch (error) {
@@ -21,6 +20,11 @@ const addExpense = async (e) => {
 
   const nameInput = document.querySelector('#expense-name');
   const amountInput = document.querySelector('#expense-amount');
+  if (nameInput === null || amountInput === null) {
+    alert('querySelector error: not found HTML element');
+    return;
+  }
+
 
   nameInput.addEventListener('keydown', removeErrorMessage);
   amountInput.addEventListener('keydown', removeErrorMessage);
@@ -81,7 +85,6 @@ const deleteAllExpenses = async () => {
       method: 'DELETE',
     });
     const data = await res.json();
-
     if (data.deletedCount > 0) {
       allExpenses = [];
     }
@@ -106,6 +109,10 @@ const acceptEdits = async (id) => {
   const newName = document.querySelector(`#name-input-${id}`);
   const newAmount = document.querySelector(`#amount-input-${id}`);
   const newDate = document.querySelector(`#date-input-${id}`);
+  if (newName === null || newAmount === null || newDate === null) {
+    alert('querySelector error: not found HTML element');
+    return;
+  }
 
   if ( newName.value.trim() === '' 
     || newAmount.value.trim() === '' 
@@ -155,6 +162,11 @@ const removeErrorMessage = () => {
 
 const showFetchError = (error) => {
   const fetchError = document.querySelector('.fetch-error');
+  if (fetchError === null) {
+    alert('querySelector error: not found HTML element');
+    return;
+  }
+
   fetchError.classList.remove('hidden');
   fetchError.innerText = `${error}`;
 };
@@ -170,6 +182,10 @@ const render = () => {
     : document.querySelector('.clear-button').classList.add('hidden');
 
   const expensesList = document.querySelector('.expenses');
+  if (expensesList === null) {
+    alert('querySelector error: not found HTML element');
+    return;
+  }
 
   while (expensesList.firstChild) {
     expensesList.removeChild(expensesList.firstChild);
@@ -180,7 +196,6 @@ const render = () => {
     
     // li
     const expense = document.createElement('li');
-    expense.id = `expense-item-${_id}`;
     expense.className = 'expenses__item';
 
     const expenseNumber = document.createElement('p');
@@ -193,7 +208,6 @@ const render = () => {
     content.className = 'content';
 
     const contentName = document.createElement('p');
-    contentName.id = `text-name-${_id}`;
     contentName.className = 'text text-name ';
     contentName.innerText = name;
 
@@ -202,12 +216,10 @@ const render = () => {
     dateAmountBlock.className = 'date-amount-box';
 
     const dateElement = document.createElement('p');
-    dateElement.id = `text-date-${_id}`;
     dateElement.className = 'text';
     dateElement.innerText = moment(date).format('DD.MM.YY');
 
     const amountElement = document.createElement('p');
-    amountElement.id = `text-amount-${_id}`;
     amountElement.className = 'text';
     amountElement.innerText = `${amount} р.`;
 
