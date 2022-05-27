@@ -17,7 +17,7 @@
     <div class="wrapper">
       <header class="header">
         <h1 class="header__heading">Учет моих расходов</h1>
-        <form class="header__form" onsubmit="addExpense(event)">
+        <form class="header__form">
           <div class="header__form-cell header__form_name">
             <label for="expense-name" class="form-cell__label">
               Куда было потрачено?
@@ -41,7 +41,12 @@
             />
           </div>
           <div class="header__form-cell">
-            <button class="header__form_button button">Добавить</button>
+            <button 
+              type="button" 
+              class="header__form_button button"
+              onclick="addExpense(event)"
+            >
+              Добавить</button>
           </div>
         </form>
         <p class="error-message hidden">

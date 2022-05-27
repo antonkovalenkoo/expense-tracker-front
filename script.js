@@ -16,14 +16,13 @@ window.onload = async () => {
 };
 
 const addExpense = async (e) => {
-  e.preventDefault();
-
   const nameInput = document.querySelector('#expense-name');
   const amountInput = document.querySelector('#expense-amount');
   const errorMessage = document.querySelector('.error-message');
   if (nameInput === null 
     || amountInput === null
-    || errorMessage === null) {
+    || errorMessage === null
+  ) {
     return;
   }
 
@@ -109,9 +108,10 @@ const showEditFields = (id) => {
     || editBlock === null
     || nameInput === null
     || amountInput === null
-    || dateInput === null) {
-      return;
-    }
+    || dateInput === null
+  ) {
+    return;
+  }
   
   content.classList.add('hidden');
   editBlock.classList.remove('hidden');
@@ -134,7 +134,8 @@ const acceptEdits = async (id) => {
     || newDate === null
     || errorMessage === null
     || content === null
-    || editBlock === null) {
+    || editBlock === null
+  ) {
     return;
   }
 
@@ -177,8 +178,7 @@ const acceptEdits = async (id) => {
 const hideEditFields = (id) => {
   const content = document.querySelector(`#content-${id}`);
   const editBlock = document.querySelector(`#edit-block-${id}`);
-  if (content === null
-    || editBlock === null) {
+  if (content === null || editBlock === null) {
     return;
   }
 
@@ -204,7 +204,8 @@ const render = () => {
   const fetchError = document.querySelector('.fetch-error');
   if (expensesList === null
     || sumNum === null
-    || fetchError === null) {
+    || fetchError === null
+  ) {
     return;
   }
   
