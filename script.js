@@ -1,17 +1,17 @@
 let allExpenses = [];
-const url = 'http://localhost:8000';
+const url = 'http://localhost:9000';
 const fetchHeaders = {
   'Content-type': 'application/json',
 };
 
 window.onload = async () => {
   try {
-    const res = await fetch(url);
+    const res = await fetch(`${url}/expenses`);
     const data = await res.json();
     allExpenses = data;
     render();
   } catch (error) {
-    showFetchError(error);
+    showErrorMessage(error);
   }
 };
 
@@ -20,14 +20,12 @@ const addExpense = async (e) => {
 
   const nameInput = document.querySelector('#expense-name');
   const amountInput = document.querySelector('#expense-amount');
-  if (nameInput === null || amountInput === null) {
-    alert('querySelector error: not found HTML element');
+  const errorMessage = document.querySelector('.error-message');
+  if (nameInput === null 
+    || amountInput === null
+    || errorMessage === null) {
     return;
   }
-
-
-  nameInput.addEventListener('keydown', removeErrorMessage);
-  amountInput.addEventListener('keydown', removeErrorMessage);
 
   if ( nameInput.value.trim() === '' 
     || amountInput.value.trim() === '' 
@@ -35,7 +33,7 @@ const addExpense = async (e) => {
   ) {
     nameInput.classList.add('error');
     amountInput.classList.add('error');
-    document.querySelector('.error-message').classList.remove('hidden');
+    errorMessage.classList.remove('hidden');
     return;
   }
 
@@ -51,12 +49,14 @@ const addExpense = async (e) => {
     const data = await res.json();
 
     allExpenses.push(data);
-    allExpenses.sort((a, b) => new Date(b.date) - new Date(a.date));
     render();
   } catch (error) {
-    showFetchError(error);
+    showErrorMessage(error);
   }
 
+  nameInput.classList.remove('error');
+  amountInput.classList.remove('error');
+  errorMessage.classList.add('hidden');
   nameInput.value = '';
   amountInput.value = '';
 };
@@ -73,9 +73,10 @@ const deleteExpense = async (id) => {
     if (data.deletedCount > 0) {
       allExpenses = allExpenses.filter((item) => item._id !== id);
     }
+
     render();
   } catch (error) {
-    showFetchError(error);
+    showErrorMessage(error);
   }
 };
 
@@ -85,23 +86,38 @@ const deleteAllExpenses = async () => {
       method: 'DELETE',
     });
     const data = await res.json();
+
     if (data.deletedCount > 0) {
       allExpenses = [];
     }
+
     render();
   } catch (error) {
-    showFetchError(error);
+    showErrorMessage(error);
   }
 };
 
 const showEditFields = (id) => {
   const selectedItem = allExpenses.find((item) => item._id === id);
-  document.querySelector(`#content-${id}`).classList.add('hidden');
-  document.querySelector(`#edit-block-${id}`).classList.remove('hidden');
-
-  document.querySelector(`#name-input-${id}`).value = selectedItem.name;
-  document.querySelector(`#amount-input-${id}`).value = selectedItem.amount;
-  document.querySelector(`#date-input-${id}`).value = moment(selectedItem.date).format('YYYY-MM-DD');
+  const content = document.querySelector(`#content-${id}`);
+  const editBlock = document.querySelector(`#edit-block-${id}`);
+  const nameInput = document.querySelector(`#name-input-${id}`);
+  const amountInput = document.querySelector(`#amount-input-${id}`);
+  const dateInput = document.querySelector(`#date-input-${id}`);
+  if (selectedItem === null 
+    || content === null
+    || editBlock === null
+    || nameInput === null
+    || amountInput === null
+    || dateInput === null) {
+      return;
+    }
+  
+  content.classList.add('hidden');
+  editBlock.classList.remove('hidden');
+  nameInput.value = selectedItem.name;
+  amountInput.value = selectedItem.amount;
+  dateInput.value = moment(selectedItem.date).format('YYYY-MM-DD');
 };
 
 const acceptEdits = async (id) => {
@@ -109,8 +125,16 @@ const acceptEdits = async (id) => {
   const newName = document.querySelector(`#name-input-${id}`);
   const newAmount = document.querySelector(`#amount-input-${id}`);
   const newDate = document.querySelector(`#date-input-${id}`);
-  if (newName === null || newAmount === null || newDate === null) {
-    alert('querySelector error: not found HTML element');
+  const errorMessage = document.querySelector('.error-message');
+  const content = document.querySelector(`#content-${id}`);
+  const editBlock = document.querySelector(`#edit-block-${id}`);
+  if (editingItem === null
+    || newName === null 
+    || newAmount === null 
+    || newDate === null
+    || errorMessage === null
+    || content === null
+    || editBlock === null) {
     return;
   }
 
@@ -120,7 +144,7 @@ const acceptEdits = async (id) => {
   ) {
     newName.classList.add('error');
     newAmount.classList.add('error');
-    document.querySelector('.error-message').classList.remove('hidden');
+    errorMessage.classList.remove('hidden');
     return;
   }
 
@@ -138,32 +162,33 @@ const acceptEdits = async (id) => {
       headers: fetchHeaders,
     });
     const data = await res.json();
-
-    allExpenses = allExpenses.map((item) => item._id === id ? data : item);
+    allExpenses = allExpenses.map(item => item._id === id ? data : item);
+    
+    errorMessage.classList.add('hidden');
     render();
   } catch (error) {
-    showFetchError(error);
+    showErrorMessage(error);
   }
 
-  document.querySelector(`#content-${id}`).classList.remove('hidden');
-  document.querySelector(`#edit-block-${id}`).classList.add('hidden');
+  content.classList.remove('hidden');
+  editBlock.classList.add('hidden');
 };
 
 const hideEditFields = (id) => {
-  document.querySelector(`#content-${id}`).classList.remove('hidden');
-  document.querySelector(`#edit-block-${id}`).classList.add('hidden');
+  const content = document.querySelector(`#content-${id}`);
+  const editBlock = document.querySelector(`#edit-block-${id}`);
+  if (content === null
+    || editBlock === null) {
+    return;
+  }
+
+  content.classList.remove('hidden');
+  editBlock.classList.add('hidden');
 };
 
-const removeErrorMessage = () => {
-  document.querySelector('#expense-name').classList.remove('error');
-  document.querySelector('#expense-amount').classList.remove('error');
-  document.querySelector('.error-message').classList.add('hidden');
-};
-
-const showFetchError = (error) => {
+const showErrorMessage = (error) => {
   const fetchError = document.querySelector('.fetch-error');
   if (fetchError === null) {
-    alert('querySelector error: not found HTML element');
     return;
   }
 
@@ -173,25 +198,39 @@ const showFetchError = (error) => {
 
 const render = () => {
   let sumTotalSpent = allExpenses.reduce((acc, item) => acc += item.amount, 0)
-  document.querySelector('.sum-num').innerText = sumTotalSpent;
-
-  document.querySelector('.fetch-error').classList.add('hidden');
+  
+  const expensesList = document.querySelector('.expenses');
+  const sumNum = document.querySelector('.sum-num');
+  const fetchError = document.querySelector('.fetch-error');
+  if (expensesList === null
+    || sumNum === null
+    || fetchError === null) {
+    return;
+  }
+  
+  sumNum.innerText = sumTotalSpent;
+  fetchError.classList.add('hidden');
 
   allExpenses.length > 1
     ? document.querySelector('.clear-button').classList.remove('hidden')
     : document.querySelector('.clear-button').classList.add('hidden');
 
-  const expensesList = document.querySelector('.expenses');
-  if (expensesList === null) {
-    alert('querySelector error: not found HTML element');
-    return;
-  }
-
   while (expensesList.firstChild) {
     expensesList.removeChild(expensesList.firstChild);
   }
 
-  allExpenses.forEach((item, index) => {
+  const sortedExpenses = [...allExpenses];
+  sortedExpenses.sort((a, b) => {
+    const dateParsedA = new Date(Date.parse(a.date));
+    const dateParsedB = new Date(Date.parse(b.date));
+    if (dateParsedA.toISOString() === a.date 
+      && dateParsedB.toISOString() === b.date) {
+        return new Date(b.date) - new Date(a.date);
+      }
+    return showErrorMessage('Dates is wrong format (not ISO)');
+  })
+
+  sortedExpenses.forEach((item, index) => {
     const { _id, name, amount, date } = item;
     
     // li
