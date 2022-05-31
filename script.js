@@ -7,8 +7,15 @@ const fetchHeaders = {
 window.onload = async () => {
   try {
     const res = await fetch(`${url}/expenses`);
-    const data = await res.json();
-    allExpenses = data;
+
+    if (res.status >= 400) {
+      const errorMessage = await res.text();
+      throw new Error(errorMessage);
+    } else {
+      const data = await res.json();
+      allExpenses = data;
+    }
+
     render();
   } catch (error) {
     showErrorMessage(error);
@@ -45,9 +52,15 @@ const addExpense = async (e) => {
       }),
       headers: fetchHeaders,
     });
-    const data = await res.json();
 
-    allExpenses.push(data);
+    if (res.status >= 400) {
+      const errorMessage = await res.text();
+      throw new Error(errorMessage);
+    } else {
+      const data = await res.json();
+      allExpenses.push(data);
+    }
+
     render();
   } catch (error) {
     showErrorMessage(error);
@@ -67,10 +80,15 @@ const deleteExpense = async (id) => {
       body: JSON.stringify({ id: id }),
       headers: fetchHeaders,
     });
-    const data = await res.json();
 
-    if (data.deletedCount > 0) {
-      allExpenses = allExpenses.filter((item) => item._id !== id);
+    if (res.status >= 400) {
+      const errorMessage = await res.text();
+      throw new Error(errorMessage);
+    } else {
+      const data = await res.json();
+      if (data.deletedCount > 0) {
+        allExpenses = allExpenses.filter((item) => item._id !== id);
+      }
     }
 
     render();
@@ -84,10 +102,15 @@ const deleteAllExpenses = async () => {
     const res = await fetch(`${url}/deleteAll`, {
       method: 'DELETE',
     });
-    const data = await res.json();
 
-    if (data.deletedCount > 0) {
-      allExpenses = [];
+    if (res.status >= 400) {
+      const errorMessage = await res.text();
+      throw new Error(errorMessage);
+    } else {
+      const data = await res.json();
+      if (data.deletedCount > 0) {
+        allExpenses = [];
+      }
     }
 
     render();
@@ -162,8 +185,14 @@ const acceptEdits = async (id) => {
       }),
       headers: fetchHeaders,
     });
-    const data = await res.json();
-    allExpenses = allExpenses.map(item => item._id === id ? data : item);
+
+    if (res.status >= 400) {
+      const errorMessage = await res.text();
+      throw new Error(errorMessage);
+    } else {
+      const data = await res.json();
+      allExpenses = allExpenses.map(item => item._id === id ? data : item);
+    }
     
     errorMessage.classList.add('hidden');
     render();
