@@ -162,6 +162,10 @@ const acceptEdits = async (id) => {
     return;
   }
 
+  /* Number.isNaN(+newAmount.value) проверяет ввел ли пользователь 
+  число или ошибочно ввел букву. Так как newAmount это строка, то 
+  '+' конвертирует newAmount в число, без '+' Number.isNaN отработает 
+  некорректно. Всю эту ситуацию можно избежать, задав input тип number */
   if ( newName.value.trim() === '' 
     || newAmount.value.trim() === '' 
     || Number.isNaN(+newAmount.value)
