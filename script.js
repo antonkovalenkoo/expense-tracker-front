@@ -4,18 +4,20 @@ const fetchHeaders = {
   'Content-type': 'application/json',
 };
 
+const errorCheck = async(res) => {
+  if (res.status >= 400) {
+    const errorMessage = await res.text();
+    throw new Error(errorMessage);
+  }
+}
+
 window.onload = async () => {
   try {
     const res = await fetch(`${url}/expenses`);
 
-    if (res.status >= 400) {
-      const errorMessage = await res.text();
-      throw new Error(errorMessage);
-    } else {
-      const data = await res.json();
-      allExpenses = data;
-    }
-
+    await errorCheck(res);
+    const data = await res.json();
+    allExpenses = data;
     render();
   } catch (error) {
     showErrorMessage(error);
@@ -34,8 +36,7 @@ const addExpense = async (e) => {
   }
 
   if ( nameInput.value.trim() === '' 
-    || amountInput.value.trim() === '' 
-    || Number.isNaN(+amountInput.value)
+    || amountInput.value.trim() === ''
   ) {
     nameInput.classList.add('error');
     amountInput.classList.add('error');
@@ -53,14 +54,9 @@ const addExpense = async (e) => {
       headers: fetchHeaders,
     });
 
-    if (res.status >= 400) {
-      const errorMessage = await res.text();
-      throw new Error(errorMessage);
-    } else {
-      const data = await res.json();
-      allExpenses.push(data);
-    }
-
+    await errorCheck(res);
+    const data = await res.json();
+    allExpenses.push(data);
     render();
   } catch (error) {
     showErrorMessage(error);
@@ -81,16 +77,12 @@ const deleteExpense = async (id) => {
       headers: fetchHeaders,
     });
 
-    if (res.status >= 400) {
-      const errorMessage = await res.text();
-      throw new Error(errorMessage);
-    } else {
-      const data = await res.json();
-      if (data.deletedCount > 0) {
-        allExpenses = allExpenses.filter((item) => item._id !== id);
-      }
+    await errorCheck(res);
+    const data = await res.json();
+    if (data.deletedCount > 0) {
+      allExpenses = allExpenses.filter((item) => item._id !== id);
     }
-
+    
     render();
   } catch (error) {
     showErrorMessage(error);
@@ -103,16 +95,12 @@ const deleteAllExpenses = async () => {
       method: 'DELETE',
     });
 
-    if (res.status >= 400) {
-      const errorMessage = await res.text();
-      throw new Error(errorMessage);
-    } else {
-      const data = await res.json();
-      if (data.deletedCount > 0) {
-        allExpenses = [];
-      }
+    await errorCheck(res);
+    const data = await res.json();
+    if (data.deletedCount > 0) {
+      allExpenses = [];
     }
-
+    
     render();
   } catch (error) {
     showErrorMessage(error);
@@ -162,13 +150,8 @@ const acceptEdits = async (id) => {
     return;
   }
 
-  /* Number.isNaN(+newAmount.value) проверяет ввел ли пользователь 
-  число или ошибочно ввел букву. Так как newAmount это строка, то 
-  '+' конвертирует newAmount в число, без '+' Number.isNaN отработает 
-  некорректно. Всю эту ситуацию можно избежать, задав input тип number */
   if ( newName.value.trim() === '' 
-    || newAmount.value.trim() === '' 
-    || Number.isNaN(+newAmount.value)
+    || newAmount.value.trim() === ''
   ) {
     newName.classList.add('error');
     newAmount.classList.add('error');
@@ -190,14 +173,10 @@ const acceptEdits = async (id) => {
       headers: fetchHeaders,
     });
 
-    if (res.status >= 400) {
-      const errorMessage = await res.text();
-      throw new Error(errorMessage);
-    } else {
-      const data = await res.json();
-      allExpenses = allExpenses.map(item => item._id === id ? data : item);
-    }
-    
+    await errorCheck(res);
+    const data = await res.json();
+    allExpenses = allExpenses.map(item => item._id === id ? data : item);
+
     errorMessage.classList.add('hidden');
     render();
   } catch (error) {
@@ -337,7 +316,6 @@ const render = () => {
 
     const nameInput = document.createElement('input');
     nameInput.id = `name-input-${_id}`;
-    nameInput.type = 'text';
     nameInput.className = 'edit-input name-input';
 
     // date-amount box
@@ -351,7 +329,7 @@ const render = () => {
 
     const amountInput = document.createElement('input');
     amountInput.id = `amount-input-${_id}`;
-    amountInput.type = 'text';
+    amountInput.type = 'number';
     amountInput.className = 'edit-input';
 
     dateAmountEditBlock.appendChild(dateInput);
