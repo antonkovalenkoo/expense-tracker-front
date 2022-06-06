@@ -5,7 +5,7 @@ const fetchHeaders = {
 };
 
 const errorCheck = async(res) => {
-  if (res.status >= 400) {
+  if (res.status >= 300) {
     const errorMessage = await res.text();
     throw new Error(errorMessage);
   }
