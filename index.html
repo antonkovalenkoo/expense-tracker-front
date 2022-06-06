@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="text/JavaScript" src=" https://MomentJS.com/downloads/moment.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+    <title>Учет расходов</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <h1 class="header__heading">Учет расходов</h1>
+        <form class="header__form">
+          <div class="header__form-cell header__form_name">
+            <label for="expense-name" class="form-cell__label">
+              Куда было потрачено?
+            </label>
+            <input
+              id="expense-name"
+              type="text"
+              class="form-cell__input"
+              placeholder="Куда было потрачено?"
+            />
+          </div>
+          <div class="header__form-cell header__form_amount">
+            <label for="expense-amount" class="form-cell__label">
+              Сколько было потрачено?
+            </label>
+            <input
+              id="expense-amount"
+              type="number"
+              class="form-cell__input"
+              placeholder="Сколько было потрачено?"
+            />
+          </div>
+          <div class="header__form-cell">
+            <button 
+              type="button" 
+              class="header__form_button button"
+              onclick="addExpense(event)"
+            >
+              Добавить</button>
+          </div>
+        </form>
+        <p class="error-message hidden">
+          Пожалуйста укажите куда и сколько вы потратили
+        </p>
+        <p class="text sum-text">Итого: <span class="text sum-num"></span>р.</p>
+      </header>
+      <ul class="expenses"></ul>
+      <p class="error-message fetch-error"></p>
+      <button class="clear-button hidden" onclick="deleteAllExpenses()">
+        Очистить все
+      </button>
+    </div>
+  </body>
+</html>
